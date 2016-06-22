@@ -41,16 +41,19 @@
                         <td><div id="District"
 							data-filter='District'
 							data-category='agency'
+							data-filter-text='District Schools'
 							data-state='active'
 							class="filter agency active"><a href="#" class="filter-link">District-DCPS</a></div></td>
 						<td><div id="Charter"
 							data-filter='Charter'
 							data-category='agency'
+							data-filter-text='Public Charter Schools'
 							data-state='active'
 							class="filter agency active"><a href="#" class="filter-link">Charter-PCS</a></div></td>
 						<td><div id="All"
 							data-filter='All'
 							data-category='agency'
+							data-filter-text='District and Charter Schools'
 							data-state='active'
 							class="filter agency active"><a href="#" class="filter-link">Both</a></div></td>
                     </tr>
@@ -59,16 +62,19 @@
                         <td><div id="High"
 							data-filter='High'
 							data-category='levels'
+							data-filter-text='High Schools, 6-12 MS/HS, Adult, Alternative Schools'
 							data-state='active'
 							class="filter levels active"><a href="#" class="filter-link">High</a></div></td>
                         <td><div id="Middle"
 							data-filter='Middle'
 							data-category='levels'
+							data-filter-text='Middle Schools, Special Ed'
 							data-state='active'
 							class="filter levels active"><a href="#" class="filter-link">Middle</a></div></td>
                         <td><div id="Elem"
 							data-filter='Elem'
 							data-category='levels'
+							data-filter-text='Elementary, Elem/Middle, Early Childhood Schools'
 							data-state='active'
 							class="filter levels active"><a href="#" class="filter-link">Elem</a></div></td>
                     </tr>
@@ -77,11 +83,13 @@
                         <td><div id="Ward"
 							data-filter='Ward'
 							data-category='zones'
+							data-filter-text='Ward'
 							data-state='active'
 							class="filter zones active"><a href="#" class="filter-link">Ward</a></div></td>
                         <td><div id="FeederHS"
 							data-filter='FeederHS'
 							data-category='zones'
+							data-filter-text='High School Feeder Pattern'
 							data-state='active'
 							class="filter zones active"><a href="#" class="filter-link">DCPS HS Feeder</a></div></td>
 						<td><div>&nbsp;</div></td>
@@ -91,16 +99,19 @@
 						<td><div id="MajorExp9815"
 							data-filter='MajorExp9815'
 							data-category='expend'
+							data-filter-text='Past facility spending (1998-2015)'
 							data-state='active'
 							class="filter expend active"><a href="#" class="filter-link">PAST FY1998-2015</a></div></td>
                         <td><div id="spendPlanned"
 							data-filter='spendPlanned'
 							data-category='expend'
+							data-filter-text='Planned facility spending (2016-2021)'
 							data-state='active'
 							class="filter expend active"><a href="#" class="filter-link">FUTURE FY2016-21</a></div></td>
 						<td><div id="spendLifetime"
 							data-filter='spendLifetime'
 							data-category='expend'
+							data-filter-text='Total facility spending (1998-2021)'
 							data-state='active'
 							class="filter expend active"><a href="#" class="filter-link">TOTAL FY1998-2021</a></div></td>
                     </tr>
@@ -126,6 +137,7 @@
 <script type="text/javascript" src="processText.js"></script>
 <script type="text/javascript" src="mapFunctions.js"></script>
 <script type="text/javascript" src="utilities.js"></script>
+<script type="text/javascript" src="filters.js"></script>
 <script type="text/javascript" src="script.js"></script>
 
 <script type="text/javascript">
@@ -133,6 +145,7 @@
 	    console.log('jQuery loaded');
 	    console.log('document ready');
 		var fs = initApp("toolMap");
+
 	});
 </script>
 

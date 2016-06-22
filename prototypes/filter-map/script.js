@@ -55,7 +55,6 @@ function initApp(presetMode) {
         this.zonesMenu = ["zones", filterMenu.Ward, filterMenu.FeederHS];
         this.expendMathMenu = ["expendMath", filterMenu.spendAmount, filterMenu.spendEnroll, filterMenu.spendSqFt];
         this.filterMenusArray = [this.agencyMenu, this.levelsMenu, this.zonesMenu, this.expendMenu];
-        this.filterTitlesObject = { "agency":"All", "levels":null, "expend":null, "zones": "Ward" };
         this.filterTitlesArray = [];
         this.schoolNamesArray = [];
         this.categoryLabels = ["sector", "schools", "spending", "location"];
@@ -139,7 +138,7 @@ function initApp(presetMode) {
     Display.prototype.makeSelectBox = function(jsonData) {
         console.log("makeSelectBox");
 
-        var selectBox = null
+        var selectBox = null;
         var selectHtml = "<select id='school-select'>";
         var nextSchool, nextSchoolName;
         for (var i = 0; i < jsonData.length; i++ ) {
@@ -351,7 +350,7 @@ function initApp(presetMode) {
         });
 
         // ======= ======= ======= selectFilter ======= ======= =======
-        $(nextElement).off("click").on("click", function(event){
+        $(nextElement).on("click", function(event){
             console.log("\n======= selectFilter ======= ");
 
             var whichFilter = nextElement.data("filter");
@@ -375,26 +374,11 @@ function initApp(presetMode) {
                 case "agency":
                     self.dataFilters.agency = whichFilter;
                     zonesCollectionObj.aggregatorArray = [];
-                    if (whichFilter == "All") {
-                        setMenuState(self.agencyMenu, ["A", "A", "S"]);
-                        resetMenuState("zones");
-                    } else if (whichFilter == "District") {
-                        setMenuState(self.agencyMenu, ["S", "A", "A"]);
-                        resetMenuState("zones");
-                    } else if (whichFilter == "Charter") {
+                    if (whichFilter == "Charter") {
                         self.dataFilters.zones = "Ward";
                         zonesCollectionObj.zoneA = "Ward";
                         zonesCollectionObj.zoneGeojson_AB = null;
                         zonesCollectionObj.aggregatorArray = [];
-                        if (self.dataFilters.levels == "HS") {
-                            setMenuState(self.levelsMenu, ["S", "A", "A"]);
-                        } else if (self.dataFilters.levels == "MS") {
-                            setMenuState(self.levelsMenu, ["A", "S", "A"]);
-                        } else if (self.dataFilters.levels == "ES") {
-                            setMenuState(self.levelsMenu, ["A", "A", "S"]);
-                        }
-                        setMenuState(self.agencyMenu, ["A", "S", "A"]);
-                        setMenuState(self.zonesMenu, ["S", "D"]);
                     }
                     break;
 
@@ -403,13 +387,10 @@ function initApp(presetMode) {
                     self.dataFilters.levels = whichValue;
                     zonesCollectionObj.aggregatorArray = [];
                     if (whichValue == "HS") {
-                        setMenuState(self.levelsMenu, ["S", "A", "A"]);
                         zonesCollectionObj.zoneA = "FeederHS";
                     } else if (whichValue == "MS") {
-                        setMenuState(self.levelsMenu, ["A", "S", "A"]);
                         zonesCollectionObj.zoneA = "FeederMS";
                     } else if (whichValue == "ES") {
-                        setMenuState(self.levelsMenu, ["A", "A", "S"]);
                         zonesCollectionObj.zoneA = "Elementary";
                     } else {
                         zonesCollectionObj.zoneA = "Ward";
@@ -420,13 +401,6 @@ function initApp(presetMode) {
                 case "expend":
                     self.dataFilters.expend = whichFilter;
                     console.log("  whichFilter: ", whichFilter);
-                    if (whichFilter == "spendLifetime") {
-                        setMenuState(self.expendMenu, ["S", "A", "A"]);
-                    } else if (whichFilter == "MajorExp9815") {
-                        setMenuState(self.expendMenu, ["A", "S", "A"]);
-                    } else if (whichFilter == "spendPlanned") {
-                        setMenuState(self.expendMenu, ["A", "A", "S"]);
-                    }
                     zonesCollectionObj.aggregatorArray = [];
                     break;
 
@@ -445,86 +419,42 @@ function initApp(presetMode) {
                     // == high school feeder zone selected
                     if (whichFilter == "FeederHS") {
                         self.dataFilters.agency = "District";
-                        setMenuState(self.agencyMenu, ["S", "D", "D"]);
-                        setMenuState(self.zonesMenu, ["A", "S"]);
 
                         // == high school feeder zones apply to middle or elem schools
+                        self.dataFilters.levels = tempLevels;
                         if (tempLevels == "ES") {
-                            self.dataFilters.levels = "ES";
-                            setMenuState(self.levelsMenu, ["A", "A", "S"]);
                             levelObject = filterMenu["Elem"];
                         } else if (tempLevels == "MS") {
-                            self.dataFilters.levels = "MS";
-                            setMenuState(self.levelsMenu, ["A", "S", "A"]);
                             levelObject = filterMenu["Middle"];
                         } else if (tempLevels == "HS") {
-                            self.dataFilters.levels = "HS";
-                            setMenuState(self.levelsMenu, ["S", "A", "A"]);
                             levelObject = filterMenu["High"];
                         } else if (tempLevels == null) {
-                            self.dataFilters.levels = null;
-                            setMenuState(self.levelsMenu, ["A", "A", "A"]);
                             levelObject = filterMenu[null];
                         }
 
                     // == middle school feeder zone selected
                     } else if (whichFilter == "FeederMS") {
                         self.dataFilters.agency = "District";
-                        setMenuState(self.agencyMenu, ["S", "D", "D"]);
-                        setMenuState(self.zonesMenu, ["A", "A"]);
 
                         // == high school feeder zones apply to middle or elem schools
+                        self.dataFilters.levels = tempLevels;
                         if (tempLevels == "ES") {
-                            self.dataFilters.levels = "ES";
-                            setMenuState(self.levelsMenu, ["A", "A", "S"]);
                             levelObject = filterMenu["Elem"];
                         } else if (tempLevels == "MS") {
-                            self.dataFilters.levels = "MS";
-                            setMenuState(self.levelsMenu, ["A", "S", "A"]);
                             levelObject = filterMenu["Middle"];
                         } else if (tempLevels == "HS") {
-                            self.dataFilters.levels = "HS";
-                            setMenuState(self.levelsMenu, ["S", "A", "A"]);
                             levelObject = filterMenu["High"];
                         } else if (tempLevels == null) {
-                            self.dataFilters.levels = null;
-                            setMenuState(self.levelsMenu, ["A", "A", "A"]);
                             levelObject = filterMenu[null];
                         }
 
                         // == middle school feeder zones apply to elementary schools only
                         // self.dataFilters.levels = "ES";
-                        // setMenuState(self.zonesMenu, ["A", "A", "S"]);
-                        // setMenuState(self.levelsMenu, ["D", "D", "S"]);
                         // levelObject = filterMenu["Elem"];
 
                     // == elementary zone selected
                     } else if (whichFilter == "Elementary") {
                         self.dataFilters.levels = "ES";
-                        setMenuState(self.zonesMenu, ["A", "A"]);
-                        setMenuState(self.levelsMenu, ["A", "A", "A"]);
-
-                    // == no zone or Ward selected
-                    } else {
-                        if (displayObj.dataFilters.levels == "HS") {
-                            setMenuState(self.levelsMenu, ["S", "A", "A"]);
-                        } else if (displayObj.dataFilters.levels == "MS") {
-                            setMenuState(self.levelsMenu, ["A", "S", "A"]);
-                        } else if (displayObj.dataFilters.levels == "ES") {
-                            setMenuState(self.levelsMenu, ["A", "A", "S"]);
-                        } else {
-                            setMenuState(self.levelsMenu, ["A", "A", "A"]);
-                        }
-                        if (displayObj.dataFilters.agency == "District") {
-                            setMenuState(self.agencyMenu, ["S", "A", "A"]);
-                        } else if (displayObj.dataFilters.agency == "Charter") {
-                            setMenuState(self.agencyMenu, ["A", "S", "A"]);
-                        } else if (displayObj.dataFilters.agency == "All") {
-                            setMenuState(self.agencyMenu, ["A", "A", "S"]);
-                        } else {
-                            setMenuState(self.agencyMenu, ["A", "A", "A"]);
-                        }
-                        setMenuState(self.zonesMenu, ["S", "A"]);
                     }
                     break;
             }
@@ -536,138 +466,6 @@ function initApp(presetMode) {
             updateHoverText(null);
             zonesCollectionObj.importZoneDataA();
         });
-    }
-
-    // ======= ======= ======= setMenuState ======= ======= =======
-    function setMenuState(whichMenu, whichStates) {
-        console.log("setMenuState");
-
-        var nextState, nextFilter, nextFilterText, nextElement, checkIndex, selectedFilterText;
-
-        // == loop through states for each filter on menu
-        for (var i = 0; i < whichStates.length; i++) {
-            nextState = whichStates[i];
-            nextFilter = whichMenu[i+1];
-
-            // == avoid duplicate "schools" descriptior in filter list
-            if (whichMenu[0] == "agency") {
-                if (displayObj.filterTitlesObject.levels) {
-                    nextFilterText = nextFilter.id;
-                    if (nextFilterText == "All") {
-                        (nextFilterText = "District and Charter");
-                    }
-                } else {
-                    nextFilterText = nextFilter.text;
-                }
-            } else if (whichMenu[0] == "levels") {
-                var checkIndex = displayObj.filterTitlesObject.agency.indexOf("Schools");
-                if (checkIndex > -1) {
-                    displayObj.filterTitlesObject.agency = displayObj.filterTitlesObject.agency.substring(0, checkIndex);
-                }
-                nextFilterText = nextFilter.text;
-            } else {
-                nextFilterText = nextFilter.text;
-            }
-
-            // == see if filter is in filter list
-            nextElement = $("#" + nextFilter.id);
-            // checkIndex = $.inArray(nextFilterText, displayObj.filterTitlesArray);
-
-            // == set filter menu state; leave only selected filters in filterTitlesArray
-            if (nextState == "A") {
-                $(nextElement).addClass("active");
-                $(nextElement).removeClass("selected");
-                $(nextElement).removeClass("deactivated");
-                activateFilterLink(nextFilter);
-            } else if (nextState == "D") {
-                $(nextElement).removeClass("active");
-                $(nextElement).removeClass("selected");
-                $(nextElement).addClass("deactivated");
-                $(nextElement).off("click");
-            } else if (nextState == "S") {
-                selectedFilterText = nextFilterText;
-                displayObj.filterTitlesObject[whichMenu[0]] = selectedFilterText;
-                $(nextElement).removeClass("deactivated");
-                $(nextElement).addClass("active");
-                $(nextElement).addClass("selected");
-            }
-        }
-        updateFilterText(displayObj, whichMenu, selectedFilterText);
-    }
-
-    // ======= ======= ======= resetMenuState ======= ======= =======
-    function resetMenuState(whichMenu) {
-        console.log("resetMenuState");
-        console.log("  displayObj.dataFilters.zones: ", displayObj.dataFilters.zones);
-
-        // == restore levels menu for new zones selection (e.g. deactivate HS for feeders)
-        if (whichMenu == "zones") {
-            if (displayObj.dataFilters.zones == "Ward") {
-                setMenuState(displayObj.zonesMenu, ["S", "A"]);
-            } else if (displayObj.dataFilters.zones == "FeederHS") {
-                if ((displayObj.dataFilters.levels == "HS") || (displayObj.dataFilters.levels == "MS")) {
-                    // setMenuState(displayObj.levelsMenu, ["D", "S", "A"]);
-                } else if (displayObj.dataFilters.levels == "ES") {
-                    // setMenuState(displayObj.levelsMenu, ["D", "A", "S"]);
-                }
-                setMenuState(displayObj.zonesMenu, ["A", "S"]);
-            } else if (displayObj.dataFilters.zones == "FeederMS") {
-                // setMenuState(displayObj.levelsMenu, ["D", "D", "S"]);
-                setMenuState(displayObj.zonesMenu, ["A", "A"]);
-            } else {
-                setMenuState(displayObj.zonesMenu, ["A", "A"]);
-            }
-
-        // == set levels menu according to zones selection (e.g. deactivate HS for feeders)
-        } else if (whichMenu == "levels") {
-            if (displayObj.dataFilters.levels == "HS") {
-                if (displayObj.dataFilters.zones == "Ward") {
-                    setMenuState(displayObj.levelsMenu, ["S", "A", "A"]);
-                } else if ((displayObj.dataFilters.zones == "FeederHS") || (displayObj.dataFilters.zones == "FeederMS")) {
-                    setMenuState(displayObj.levelsMenu, ["D", "S", "A"]);
-                }
-            } else if (displayObj.dataFilters.levels == "MS") {
-                if (displayObj.dataFilters.zones == "Ward") {
-                    setMenuState(displayObj.levelsMenu, ["A", "S", "A"]);
-                } else if ((displayObj.dataFilters.zones == "FeederHS") || (displayObj.dataFilters.zones == "FeederMS")) {
-                    setMenuState(displayObj.levelsMenu, ["D", "S", "A"]);
-                }
-            } else if (displayObj.dataFilters.levels == "ES") {
-                if (displayObj.dataFilters.zones == "Ward") {
-                    setMenuState(displayObj.levelsMenu, ["A", "A", "S"]);
-                } else if (displayObj.dataFilters.zones == "FeederHS") {
-                    setMenuState(displayObj.levelsMenu, ["D", "A", "S"]);
-                } else if (displayObj.dataFilters.zones == "FeederMS") {
-                    setMenuState(displayObj.levelsMenu, ["D", "D", "S"]);
-                }
-            }
-        }
-    }
-
-    // ======= ======= ======= updateFilterText ======= ======= =======
-    function updateFilterText(displayObj, whichMenu, filterText) {
-        console.log("updateFilterText");
-
-        // == displays current user filter selections as string in #filters-selections div
-        var selectedFilterContainer = $("#filters-selections").children("h2");
-        var nextFilter, checkNextFilter;
-
-        var selectedFilterText = "<span class='filterLabel'>Data for: </span>";
-        if (displayObj.filterTitlesObject.expend) {
-            selectedFilterText += displayObj.filterTitlesObject.expend + " for";
-        }
-        if (displayObj.filterTitlesObject.agency) {
-            selectedFilterText += " " + displayObj.filterTitlesObject.agency;
-        }
-        if (displayObj.filterTitlesObject.levels) {
-            selectedFilterText += " " + displayObj.filterTitlesObject.levels;
-        }
-        if (displayObj.filterTitlesObject.zones) {
-            selectedFilterText += " by " + displayObj.filterTitlesObject.zones;
-        }
-
-        $(selectedFilterContainer).addClass("filterList");
-        $(selectedFilterContainer).html(selectedFilterText);
     }
 
     // ======= ======= ======= clearFilterSelctions ======= ======= =======
@@ -685,13 +483,14 @@ function initApp(presetMode) {
         zonesCollectionObj.zoneGeojson_AB = null;
         zonesCollectionObj.aggregatorArray = [];
         zonesCollectionObj.zoneA = "Ward";
-        displayObj.filterTitlesObject = { "agency":"District and Charter Schools", "levels":null, "expend":null, "zones": "Ward" };
         displayObj.filterTitlesArray = [displayObj.agencyMenu[1].text, displayObj.zonesMenu[1].text];
-        setMenuState(displayObj.agencyMenu, ["A", "A", "S"]);
-        setMenuState(displayObj.levelsMenu, ["A", "A", "A"]);
-        setMenuState(displayObj.zonesMenu, ["S", "A"]);
-        setMenuState(displayObj.expendMenu, ["A", "A", "A"]);
-        updateFilterText(displayObj);
+        $(".filter").removeClass("deactivated");
+        $(".filter").removeClass("selected");
+        $(".filter").addClass("activated");
+        $("#Ward").addClass("selected");
+        $("#All").addClass("selected");
+        //updateFilterText(displayObj);
+        filters.updateFilterText();
     }
 
     // ======= ======= ======= activateSelectBox ======= ======= =======
@@ -732,7 +531,8 @@ function initApp(presetMode) {
 
         var searchSchoolName = null;
         updateHoverText(null);
-        updateFilterText(displayObj);
+        //updateFilterText(displayObj);
+        filters.updateFilterText();
 
         // == find school based on search window or select
         if ($("#searchWindow").val()) {
@@ -1606,8 +1406,6 @@ function initApp(presetMode) {
     this.jsonData = null;
     displayObj.activateFilterMenus();
     displayObj.activateClearButton();
-    setMenuState(displayObj.agencyMenu, ["A", "A", "S"]);
-    setMenuState(displayObj.zonesMenu, ["S", "A"]);
     schoolsCollectionObj.importSchoolData();
     checkFilterSelection("init");
 
